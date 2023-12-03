@@ -1,7 +1,7 @@
 # Automated xy calibration for 3D printers using a scanner
 This program can be used to calibration the x and y offset of a multi-material 3D printer by printing a calibration pattern on a piece of paper, scanning it using a digital scanner and analysing it. The code exists of a gcode generator in python, that generates the gcode for the calibration pattern, as well as a image processing script in Matlab that detects the offsets automatically. An example of how the calibration pattern might look is shown below.
 
-<img width="705" alt="example" src="https://github.com/martijnschouten/scanner_3D_printer_calibration/assets/6079002/299cb75f-ac8e-4736-a79d-d5f4b6caa358">
+<img width="705" alt="example-min" src="https://github.com/martijnschouten/scanner_3D_printer_calibration/assets/6079002/bcb5881d-0a24-4d8e-8cec-6d0690c8e7a1">
 
 
 # Generator usage
