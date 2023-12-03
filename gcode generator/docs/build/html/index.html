@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to gcode generator’s documentation! &mdash; gcode generator V0.01 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> gcode generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Welcome to gcode generator’s documentation!</a></li>
+<li><a class="reference internal" href="#module-generator">generator class</a></li>
+<li><a class="reference internal" href="#calibration-pattern-class">calibration_pattern class</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">gcode generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>Welcome to gcode generator’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-gcode-generator-s-documentation">
+<h1>Welcome to gcode generator’s documentation!<a class="headerlink" href="#welcome-to-gcode-generator-s-documentation" title="Permalink to this headline"></a></h1>
+<p>The gcode generator consists of two classes. The <a class="reference internal" href="#module-0" title="generator: This class can be used to make simple gcode patterns"><code class="xref py py-class docutils literal notranslate"><span class="pre">generator</span></code></a> class is used to make it easier to generate gcode for basic geometric moves. The <a class="reference internal" href="#module-calibration_pattern" title="calibration_pattern"><code class="xref py py-class docutils literal notranslate"><span class="pre">calibration_pattern</span></code></a> class is used to generate the actual calibration patterns. To use the module to generate a gcode file called “example.g” with a calibration pattern for tools 1,2,3,4 and 5 and with tool 2 as reference use :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calibration_pattern</span> <span class="kn">import</span> <span class="n">calibartion_pattern</span>
+
+<span class="n">pattern</span> <span class="o">=</span> <span class="n">calibartion_pattern</span><span class="p">()</span>
+
+<span class="n">tool_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">reference_tool</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">full_interlocked_print</span><span class="p">(</span><span class="n">tool_list</span><span class="p">,</span><span class="n">reference_tool</span><span class="p">,</span><span class="s2">&quot;example.g&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>By default the code assumes you are using a Diabase H-series 3D printer. To configure it for another printer or change slicer settings of the gen instance in pattern should be changed. For example to make the code suitable for a dual material printer add the following code before running the <code class="xref py py-meth docutils literal notranslate"><span class="pre">calibration_pattern.full_interlocked_print()</span></code> function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">tools</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">pattern</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">standby_temperatures</span> <span class="o">=</span> <span class="p">[</span><span class="mi">175</span><span class="p">,</span><span class="mi">175</span><span class="p">]</span>
+<span class="n">pattern</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">printing_temperatures</span> <span class="o">=</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">]</span>
+<span class="n">pattern</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">extrusion_multiplier</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">]</span>
+<span class="n">pattern</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">retraction_distance</span> <span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">pattern</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">x_offsets</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">pattern</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">y_offsets</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="module-generator">
+<span id="generator-class"></span><h1>generator class<a class="headerlink" href="#module-generator" title="Permalink to this headline"></a></h1>
+<span class="target" id="module-0"></span><dl class="py class">
+<dt class="sig sig-object py" id="generator.generator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">generator.</span></span><span class="sig-name descname"><span class="pre">generator</span></span><a class="headerlink" href="#generator.generator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class can be used to make simple gcode patterns</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.bed_temp">
+<span class="sig-name descname"><span class="pre">bed_temp</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60</span></em><a class="headerlink" href="#generator.generator.bed_temp" title="Permalink to this definition"></a></dt>
+<dd><p>Temperature in degrees celsius to which the bed will be heated</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.enable_retraction">
+<span class="sig-name descname"><span class="pre">enable_retraction</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#generator.generator.enable_retraction" title="Permalink to this definition"></a></dt>
+<dd><p>Wether or not retraction should be enabled</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.extrude">
+<span class="sig-name descname"><span class="pre">extrude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amount</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.extrude" title="Permalink to this definition"></a></dt>
+<dd><p>Extrude a specifc amount of filament</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>amount</strong> – The amount of filament to extrude</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the extrusion</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.extrusion_for_length">
+<span class="sig-name descname"><span class="pre">extrusion_for_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.extrusion_for_length" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a desired line length, to the extrusion volume needed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>volume</strong> – The desired line length</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The extrusion volume needed</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.extrusion_multiplier">
+<span class="sig-name descname"><span class="pre">extrusion_multiplier</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[1.1,</span> <span class="pre">1.1,</span> <span class="pre">1.1,</span> <span class="pre">1.1,</span> <span class="pre">1.1]</span></em><a class="headerlink" href="#generator.generator.extrusion_multiplier" title="Permalink to this definition"></a></dt>
+<dd><p>Extrusion multiplier used for the tools in the tools list. Should be of the same size as tools.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.extrusion_volume_to_length">
+<span class="sig-name descname"><span class="pre">extrusion_volume_to_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.extrusion_volume_to_length" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a desired volume to be extruded out of the nozzle, to the length of filament that needs to be extruded</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>volume</strong> – The desired volume to be extruded out of the nozzle</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The length of filament that needs to be extruded</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.filament_diameter">
+<span class="sig-name descname"><span class="pre">filament_diameter</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.75</span></em><a class="headerlink" href="#generator.generator.filament_diameter" title="Permalink to this definition"></a></dt>
+<dd><p>Diameter of the used filament in millimeter</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.find_tools">
+<span class="sig-name descname"><span class="pre">find_tools</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tool_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.find_tools" title="Permalink to this definition"></a></dt>
+<dd><p>Find the tool indexes belonging to a tool number. Usefull to generate the tool_index parameter of <a class="reference internal" href="#generator.generator.tool_change" title="generator.generator.tool_change"><code class="xref py py-meth docutils literal notranslate"><span class="pre">generator.tool_change()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tool_list</strong> – A list of tool numbers.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A List of tool indices</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.insert_pause">
+<span class="sig-name descname"><span class="pre">insert_pause</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#generator.generator.insert_pause" title="Permalink to this definition"></a></dt>
+<dd><p>Insert a pause between probing the bed and actually printing, during which a piece of paper can be placed on the bed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.layer_height">
+<span class="sig-name descname"><span class="pre">layer_height</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.2</span></em><a class="headerlink" href="#generator.generator.layer_height" title="Permalink to this definition"></a></dt>
+<dd><p>Used layer height in millimeter</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.line">
+<span class="sig-name descname"><span class="pre">line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.line" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode for a line from current position with a specific length in x an y</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – Distance to move in the x direction</p></li>
+<li><p><strong>y</strong> – Distance to move in the y direction</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the line</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.move">
+<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.move" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode for a move from current position with a specific length in x an y</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – Distance to move in the x direction in millimeter</p></li>
+<li><p><strong>y</strong> – Distance to move in the y direction in millimeter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the move</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.move_to">
+<span class="sig-name descname"><span class="pre">move_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.move_to" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode for a move from the current position to a specific coordinate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – The x value of the coordinate to move towards in millimeter</p></li>
+<li><p><strong>y</strong> – The y value of the coordinate to move towards in millimeter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the move</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.nozzle_diameters">
+<span class="sig-name descname"><span class="pre">nozzle_diameters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[0.4,</span> <span class="pre">0.4,</span> <span class="pre">0.4,</span> <span class="pre">0.4,</span> <span class="pre">0.4]</span></em><a class="headerlink" href="#generator.generator.nozzle_diameters" title="Permalink to this definition"></a></dt>
+<dd><p>Diameter of the nozzle of the tools in the tools list in millimeter. Should be of the same size as tools.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.print_speed">
+<span class="sig-name descname"><span class="pre">print_speed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">30</span></em><a class="headerlink" href="#generator.generator.print_speed" title="Permalink to this definition"></a></dt>
+<dd><p>Used printing speed in mm/s</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.printing_temperatures">
+<span class="sig-name descname"><span class="pre">printing_temperatures</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[200,</span> <span class="pre">200,</span> <span class="pre">200,</span> <span class="pre">200,</span> <span class="pre">200]</span></em><a class="headerlink" href="#generator.generator.printing_temperatures" title="Permalink to this definition"></a></dt>
+<dd><p>Printing temperature used for the tools in the tools list in degrees Celsius. Should be of the same size as tools.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.quarter_turn">
+<span class="sig-name descname"><span class="pre">quarter_turn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clockwise</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.quarter_turn" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode for a quarter turn from the currrent position to a new position at a specified distance in x and y</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – Distance to move in the x direction in millimeter</p></li>
+<li><p><strong>y</strong> – Distance to move in the y direction in millimeter</p></li>
+<li><p><strong>clockwise</strong> – If the turn should be clockwise or counter clockwise</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the quarter_turn</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.reretract">
+<span class="sig-name descname"><span class="pre">reretract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.reretract" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode for a reverse retraction in case retraction is enabled</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The gcode to generate the reverse retraction</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.retract">
+<span class="sig-name descname"><span class="pre">retract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.retract" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode for a retraction in case retraction is enabled</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The gcode to generate the retraction</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.retraction_distance">
+<span class="sig-name descname"><span class="pre">retraction_distance</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[5,</span> <span class="pre">5,</span> <span class="pre">5,</span> <span class="pre">5,</span> <span class="pre">5]</span></em><a class="headerlink" href="#generator.generator.retraction_distance" title="Permalink to this definition"></a></dt>
+<dd><p>Retraction distance used for the tools in the tools list. Should be of the same size as tools.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.retraction_speed">
+<span class="sig-name descname"><span class="pre">retraction_speed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">80</span></em><a class="headerlink" href="#generator.generator.retraction_speed" title="Permalink to this definition"></a></dt>
+<dd><p>Retraction speed in mm/s used by all tools</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_cor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_cor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.rotate" title="Permalink to this definition"></a></dt>
+<dd><p>Rotate a coordinate around the center of the print</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_cor</strong> – The x value of the coordinate to rotate around the center</p></li>
+<li><p><strong>y_cor</strong> – The y value of the coordinate to rotate around the center</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The rotated coordinate</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.rotate_around_origin">
+<span class="sig-name descname"><span class="pre">rotate_around_origin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_cor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_cor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.rotate_around_origin" title="Permalink to this definition"></a></dt>
+<dd><p>Rotate a coordinate around the origin (0,0)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_cor</strong> – The x value of the coordinate to rotate around (0,0)</p></li>
+<li><p><strong>y_cor</strong> – The y value of the coordinate to rotate around (0,0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The rotated coordinate</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.rotation">
+<span class="sig-name descname"><span class="pre">rotation</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.2617993877991494</span></em><a class="headerlink" href="#generator.generator.rotation" title="Permalink to this definition"></a></dt>
+<dd><p>Rotation of the structure in radians</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.square">
+<span class="sig-name descname"><span class="pre">square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clockwise</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.square" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode for square with a specific size and the bottom left corner at the current position</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – The size of the square in the x direction</p></li>
+<li><p><strong>y</strong> – The size of the square in the y direction</p></li>
+<li><p><strong>clockwise</strong> – Boolean indicating if the square should be printed clockwise or counter clockwise</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the square</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.standby_temperatures">
+<span class="sig-name descname"><span class="pre">standby_temperatures</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[175,</span> <span class="pre">175,</span> <span class="pre">175,</span> <span class="pre">175,</span> <span class="pre">175]</span></em><a class="headerlink" href="#generator.generator.standby_temperatures" title="Permalink to this definition"></a></dt>
+<dd><p>Standby temperature used for the tools in the tools list in degrees Celsius. Should be of the same size as tools.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.starting_code">
+<span class="sig-name descname"><span class="pre">starting_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tool_list_indexes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.starting_code" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode to start a print. This includes things as homing, heating up the bed and heating up tools</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tool_list_indexes</strong> – List of tool indices that should be heated. The indices will be used to select a tool in <a class="reference internal" href="#generator.generator.tools" title="generator.generator.tools"><code class="xref py py-attr docutils literal notranslate"><span class="pre">generator.tools</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The starting gcode</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.stop_code">
+<span class="sig-name descname"><span class="pre">stop_code</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.stop_code" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode to stop a print. This includes things as moving up the bed and turning off heaters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The stopping gcode</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.tool_change">
+<span class="sig-name descname"><span class="pre">tool_change</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tool_index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.tool_change" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode to perform a tool change</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tool_list_indexes</strong> – Tool indices of the tool that should be selected. The indice will be used to select a tool in <a class="reference internal" href="#generator.generator.tools" title="generator.generator.tools"><code class="xref py py-attr docutils literal notranslate"><span class="pre">generator.tools</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode for the tool change</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.tools">
+<span class="sig-name descname"><span class="pre">tools</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5]</span></em><a class="headerlink" href="#generator.generator.tools" title="Permalink to this definition"></a></dt>
+<dd><p>List containing the tool numbers of the tools of the 3D printer</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="generator.generator.u_turn">
+<span class="sig-name descname"><span class="pre">u_turn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clockwise</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generator.generator.u_turn" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode for a u turn from the currrent position to a new position at a specified distance in x and y</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – Distance to move in the x direction in millimeter</p></li>
+<li><p><strong>y</strong> – Distance to move in the y direction in millimeter</p></li>
+<li><p><strong>clockwise</strong> – Boolean indicating if the turn should be clockwise or counter clockwise</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the u turn</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.x_center">
+<span class="sig-name descname"><span class="pre">x_center</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#generator.generator.x_center" title="Permalink to this definition"></a></dt>
+<dd><p>Location where the center of the printed structure will be (in mm)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.x_offsets">
+<span class="sig-name descname"><span class="pre">x_offsets</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0]</span></em><a class="headerlink" href="#generator.generator.x_offsets" title="Permalink to this definition"></a></dt>
+<dd><p>List with additional offsets in the x direction (mm) given to all x moves of the tools in the tools list. Should be of the same size as tools.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.y_center">
+<span class="sig-name descname"><span class="pre">y_center</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#generator.generator.y_center" title="Permalink to this definition"></a></dt>
+<dd><p>Location where the center of the printed structure will be (in mm)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.y_offsets">
+<span class="sig-name descname"><span class="pre">y_offsets</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0]</span></em><a class="headerlink" href="#generator.generator.y_offsets" title="Permalink to this definition"></a></dt>
+<dd><p>List with additional offsets in the y direction (mm) given to all y moves of the tools in the tools list. Should be of the same size as tools.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.z_hop">
+<span class="sig-name descname"><span class="pre">z_hop</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.5</span></em><a class="headerlink" href="#generator.generator.z_hop" title="Permalink to this definition"></a></dt>
+<dd><p>Wether or not a z-hop should be performed during a retraction</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="generator.generator.z_offset">
+<span class="sig-name descname"><span class="pre">z_offset</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.15</span></em><a class="headerlink" href="#generator.generator.z_offset" title="Permalink to this definition"></a></dt>
+<dd><p>Additional offset in the z direction given to all z moves in millimeter. Allows compensating for printers improperly calibrated in the z direction</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="calibration-pattern-class">
+<h1>calibration_pattern class<a class="headerlink" href="#calibration-pattern-class" title="Permalink to this headline"></a></h1>
+<span class="target" id="module-calibration_pattern"></span><span class="target" id="module-calibartion_pattern"></span><dl class="py class">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">calibration_pattern.</span></span><span class="sig-name descname"><span class="pre">calibration_pattern</span></span><a class="headerlink" href="#calibration_pattern.calibration_pattern" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.differential_interlocked_reference_pattern">
+<span class="sig-name descname"><span class="pre">differential_interlocked_reference_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.differential_interlocked_reference_pattern" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode to print one side (the reference side) of two interlocked patterns, one going up and one going down</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_start</strong> – The x location of the bottom left corner of the pattern</p></li>
+<li><p><strong>y_start</strong> – The y location of the bottom left corner of the pattern</p></li>
+<li><p><strong>direction</strong> – The direction the pattern should be printed in. Options are: ‘+y’,’+x’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the pattern</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.differential_interlocked_signal_pattern">
+<span class="sig-name descname"><span class="pre">differential_interlocked_signal_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.differential_interlocked_signal_pattern" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode to print one side (the signal side) of two interlocked patterns, one going up and one going down</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_start</strong> – The x location of the bottom left corner of the pattern</p></li>
+<li><p><strong>y_start</strong> – The y location of the bottom left corner of the pattern</p></li>
+<li><p><strong>direction</strong> – The direction the pattern should be printed in. Options are: ‘+y’,’+x’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the pattern</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.effective_length">
+<span class="sig-name descname"><span class="pre">effective_length</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.effective_length" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates actual length of a structure, taking into account that the</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The actual length of a structure</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.effective_length_interlocked">
+<span class="sig-name descname"><span class="pre">effective_length_interlocked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.effective_length_interlocked" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates actual length of a structure, taking into account that the</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The actual length of a structure</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.full_interlocked_print">
+<span class="sig-name descname"><span class="pre">full_interlocked_print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tool_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_tool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.full_interlocked_print" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode to print a complete interlocked calibration pattern, that can be scanned and analysed to find the xy offsets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tool</strong> – List of tool number of the tools. Each tool will be used for 4 calibration patterns. One in both the positive and negative x and y directions.</p></li>
+<li><p><strong>save_file_name</strong> – Name of the file the gcode will be written to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the print</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.gen">
+<span class="sig-name descname"><span class="pre">gen</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;generator.generator</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#calibration_pattern.calibration_pattern.gen" title="Permalink to this definition"></a></dt>
+<dd><p>An instance of the generator class to generate the gcode</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.interlocked_period">
+<span class="sig-name descname"><span class="pre">interlocked_period</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#calibration_pattern.calibration_pattern.interlocked_period" title="Permalink to this definition"></a></dt>
+<dd><p>How many milliemeters it takes before the structure repeats itself</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.interlocked_pitch">
+<span class="sig-name descname"><span class="pre">interlocked_pitch</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.75</span></em><a class="headerlink" href="#calibration_pattern.calibration_pattern.interlocked_pitch" title="Permalink to this definition"></a></dt>
+<dd><p>The pitch of the lines in the center of the structure in millimeters</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.interlocked_reference_pattern">
+<span class="sig-name descname"><span class="pre">interlocked_reference_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.interlocked_reference_pattern" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode to print a single interlocked reference pattern</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_start</strong> – The x location of the bottom left corner of the pattern</p></li>
+<li><p><strong>y_start</strong> – The y location of the bottom left corner of the pattern</p></li>
+<li><p><strong>direction</strong> – The direction the pattern should be printed in. Options are: ‘+y’, ‘-y’,’+x’, ‘-x’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the pattern</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.interlocked_signal_pattern">
+<span class="sig-name descname"><span class="pre">interlocked_signal_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.interlocked_signal_pattern" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.length">
+<span class="sig-name descname"><span class="pre">length</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">70</span></em><a class="headerlink" href="#calibration_pattern.calibration_pattern.length" title="Permalink to this definition"></a></dt>
+<dd><p>Total length of all the meanders</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.meander_print">
+<span class="sig-name descname"><span class="pre">meander_print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.meander_print" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode to print a simple meandering structure, that fir example can be used to better understand conduction in 3D printed conductors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tool</strong> – tool number of the tool that will be used for the print</p></li>
+<li><p><strong>save_file_name</strong> – Name of the file the gcode will be written to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the print</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.pitch">
+<span class="sig-name descname"><span class="pre">pitch</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#calibration_pattern.calibration_pattern.pitch" title="Permalink to this definition"></a></dt>
+<dd><p>Milimeter spacing between the lines of the test pattern</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.repetitions">
+<span class="sig-name descname"><span class="pre">repetitions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.repetitions" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the number of repetions/periods of the repetitie pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of repetions/periods of the repetitie pattern.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.repetitions_interlocked">
+<span class="sig-name descname"><span class="pre">repetitions_interlocked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.repetitions_interlocked" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the number of repetions/periods of the interlocked repetitive pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of repetions/periods of the interlocked repetitive pattern.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.sigref_only">
+<span class="sig-name descname"><span class="pre">sigref_only</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#calibration_pattern.calibration_pattern.sigref_only" title="Permalink to this definition"></a></dt>
+<dd><p>Space where this only a sig or a ref pattern</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.single_pattern">
+<span class="sig-name descname"><span class="pre">single_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.single_pattern" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode to print a single simple reference pattern</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_start</strong> – The x location of the bottom left corner of the pattern</p></li>
+<li><p><strong>y_start</strong> – The y location of the bottom left corner of the pattern</p></li>
+<li><p><strong>direction</strong> – The direction the pattern should be printed in. Options are: ‘+y’, ‘-y’,’+x’, ‘-x’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the pattern</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.spacing">
+<span class="sig-name descname"><span class="pre">spacing</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#calibration_pattern.calibration_pattern.spacing" title="Permalink to this definition"></a></dt>
+<dd><p>Spacing between two patterns of different nozzles</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.spacing_to_square">
+<span class="sig-name descname"><span class="pre">spacing_to_square</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#calibration_pattern.calibration_pattern.spacing_to_square" title="Permalink to this definition"></a></dt>
+<dd><p>Spacing between the patterns and the square</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.square_lines">
+<span class="sig-name descname"><span class="pre">square_lines</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#calibration_pattern.calibration_pattern.square_lines" title="Permalink to this definition"></a></dt>
+<dd><p>Number of lines of the square around the structure</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.square_pattern">
+<span class="sig-name descname"><span class="pre">square_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clockwise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.square_pattern" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the gcode to print a square at a specific location with a specific size and a specified thickness</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_start</strong> – The x location of the bottom left corner of the square</p></li>
+<li><p><strong>y_start</strong> – The y location of the bottom left corner of the square</p></li>
+<li><p><strong>x</strong> – The size of the square in the x direction</p></li>
+<li><p><strong>y</strong> – The size of the square in the y direction</p></li>
+<li><p><strong>clockwise</strong> – Boolean indicating if the square should be printed clockwise or counter clockwise</p></li>
+<li><p><strong>n</strong> – The thickness of the lines of the square in number of times the nozzle diameter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gcode to generate the square</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.total_height">
+<span class="sig-name descname"><span class="pre">total_height</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.total_height" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the total height of the patterns in both directions together</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the total height of the patterns in both directions together</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.total_height_interlocked">
+<span class="sig-name descname"><span class="pre">total_height_interlocked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.total_height_interlocked" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the total height of the patterns in both directions together in case of an interlocked print</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the total height of the patterns in both directions together</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.total_one_dir_width">
+<span class="sig-name descname"><span class="pre">total_one_dir_width</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.total_one_dir_width" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the total width of all the patterns in one direction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the total width of all the patterns in one direction</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.total_width">
+<span class="sig-name descname"><span class="pre">total_width</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.total_width" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the total width of the patterns in both directions together</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the total width of the patterns in both directions together</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.total_width_interlocked">
+<span class="sig-name descname"><span class="pre">total_width_interlocked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calibration_pattern.calibration_pattern.total_width_interlocked" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the total width of the patterns in both directions together in case of an interlocked print</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the total width of the patterns in both directions together</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="calibration_pattern.calibration_pattern.width">
+<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#calibration_pattern.calibration_pattern.width" title="Permalink to this definition"></a></dt>
+<dd><p>Length of lines in the test pattern</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Martijn Schouten.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
